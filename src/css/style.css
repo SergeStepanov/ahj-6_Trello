@@ -12,8 +12,11 @@ body {
 }
 
 .hidden {
-  /* visibility: hidden; */
   display: none;
+}
+
+.hidd {
+  visibility: hidden;
 }
 
 /* Общий контейнер */
@@ -45,6 +48,7 @@ body {
 
 ul {
   list-style-type: none;
+  min-height: 20px;
 }
 
 .card {
@@ -53,7 +57,7 @@ ul {
   background-color: rgb(254, 253, 255);
   padding: 3px;
   margin-bottom: 5px;
-  cursor: default;
+  /* cursor: pointer; */
   position: relative;
 }
 
@@ -62,6 +66,7 @@ ul {
   z-index: 999;
   pointer-events: none;
   background: #fff;
+  /* cursor: grabbing; */
 }
 
 .selected {

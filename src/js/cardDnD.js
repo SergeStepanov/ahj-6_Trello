@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable no-useless-return */
 import { updateStorage } from './localStorage';
 
@@ -17,7 +18,6 @@ export default function cardDnD() {
 
     selectedItem = target;
     selectedItem.classList.add('selected');
-    // selectedItem.style.cursor = 'grabbing';
 
     draggedItem = target.cloneNode(true);
     draggedItem.classList.add('dragged');
@@ -42,21 +42,40 @@ export default function cardDnD() {
   document.addEventListener('mousemove', (e) => {
     e.preventDefault();
 
-    if (!selectedItem) {
+    if (!draggedItem) {
       return;
     }
+
     const width = selectedItem.clientWidth;
     const height = selectedItem.clientHeight;
-    const rect = selectedItem.getBoundingClientRect();
-    const { scrollLeft, scrollTop } = document.body;
-    const left = rect.left + scrollLeft + e.clientX - startX;
-    const top = rect.top + scrollTop + e.clientY - startY;
+    // const rect = selectedItem.getBoundingClientRect();
+    // const { scrollLeft, scrollTop } = document.body;
+    // const left = rect.left + scrollLeft + e.clientX - startX;
+    // let top = rect.top + scrollTop + e.clientY - startY;
 
-    draggedItem.style.width = `${width}px`;
-    draggedItem.style.height = `${height}px`;
+    // draggedItem.style.width = `${width}px`;
+    // draggedItem.style.height = `${height}px`;
 
-    draggedItem.style.top = `${top}px`;
-    draggedItem.style.left = `${left}px`;
+    const closest = document.elementFromPoint(e.clientX, e.clientY);
+    const { top } = closest.getBoundingClientRect();
+
+    draggedItem.style.top = `${e.pageY - height / 2}px`;
+    draggedItem.style.left = `${e.pageX - width / 2}px`;
+
+    if (closest.classList.contains('card')) {
+      if (e.pageY > window.scrollY + top + closest.offsetHeight / 2) {
+        closest
+          .closest('.column-cards')
+          .insertBefore(selectedItem, closest.nextElementSibling);
+      } else {
+        closest.closest('.column-cards').insertBefore(selectedItem, closest);
+      }
+    } else if (
+      closest.classList.contains('column-cards')
+      && !closest.querySelector('.card')
+    ) {
+      closest.append(selectedItem);
+    }
   });
 
   document.addEventListener('mouseup', (e) => {
@@ -80,6 +99,7 @@ export default function cardDnD() {
     updateStorage();
 
     selectedItem.classList.remove('selected');
+
     selectedItem = null;
 
     draggedItem.remove();
