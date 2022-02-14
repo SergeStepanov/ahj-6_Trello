@@ -42,7 +42,7 @@ export default function cardDnD() {
   document.addEventListener('mousemove', (e) => {
     e.preventDefault();
 
-    if (!draggedItem) {
+    if (!selectedItem) {
       return;
     }
 
@@ -50,17 +50,14 @@ export default function cardDnD() {
     const height = selectedItem.clientHeight;
     // const rect = selectedItem.getBoundingClientRect();
     // const { scrollLeft, scrollTop } = document.body;
-    // const left = rect.left + scrollLeft + e.clientX - startX;
-    // let top = rect.top + scrollTop + e.clientY - startY;
+    // let top2 = rect.top + scrollTop + e.clientY - startY;
+    // let left = rect.left + scrollLeft + e.clientX - startX;
 
     // draggedItem.style.width = `${width}px`;
     // draggedItem.style.height = `${height}px`;
 
     const closest = document.elementFromPoint(e.clientX, e.clientY);
     const { top } = closest.getBoundingClientRect();
-
-    draggedItem.style.top = `${e.pageY - height / 2}px`;
-    draggedItem.style.left = `${e.pageX - width / 2}px`;
 
     if (closest.classList.contains('card')) {
       if (e.pageY > window.scrollY + top + closest.offsetHeight / 2) {
@@ -76,6 +73,9 @@ export default function cardDnD() {
     ) {
       closest.append(selectedItem);
     }
+
+    draggedItem.style.top = `${e.pageY - height / 2}px`;
+    draggedItem.style.left = `${e.pageX - width / 2}px`;
   });
 
   document.addEventListener('mouseup', (e) => {
